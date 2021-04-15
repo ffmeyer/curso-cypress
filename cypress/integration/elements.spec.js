@@ -9,12 +9,10 @@ describe('Work with basic elements', () => {
         cy.reload()
     })
 
-    it('Text', () => {
-        
+    it('Text', () => {        
         cy.get('Body').should('contain', 'Cuidado')
         cy.get('span').should('contain', 'Cuidado')
-        cy.get('.facilAchar').should('have.text', 'Cuidado onde clica, muitas armadilhas...')
-    
+        cy.get('.facilAchar').should('have.text', 'Cuidado onde clica, muitas armadilhas...')    
     })
 
     it('Links', () => {        
@@ -26,7 +24,7 @@ describe('Work with basic elements', () => {
         cy.contains('Voltar').click()
         cy.get('#resultado').should('have.text', 'Voltou!')
 
-        })
+    })
 
         
     it('TextFields', () => {    
@@ -63,8 +61,7 @@ describe('Work with basic elements', () => {
             .should('have.value', 'acerto')
     })
 
-    it.only('RadioButton', () => {
-
+    it('RadioButton', () => {        
         cy.get('#formSexoFem')
             .click()
             .should('be.checked')
@@ -77,5 +74,31 @@ describe('Work with basic elements', () => {
             .should('have.length', 2)
 
     })
+
+
+    it.only('Combo', () => {
+
+        cy.get('[data-test=dataEscolaridade]')
+            .select('2o grau completo')
+            .should('have.value', '2graucomp')
+        
+        cy.get('[data-test=dataEscolaridade]')
+            .select('1graucomp')
+            .should('have.value', '1 graucomp')
+
+        //TODO validar as opcoes selecionadas do combo 
+    })
+
+
+    it.only('Combo mutiplo', () => {
+        //o select funciona apenas com values
+        cy.get('[data-testid=dataEsportes]')
+            .select(['natacao','Corrida', 'nada'])
+
+        //TODO validar as selecionadas opcoes do combo
+        
+    })
+
+
 
 })
