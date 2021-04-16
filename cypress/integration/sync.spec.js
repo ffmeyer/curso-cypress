@@ -92,7 +92,7 @@ describe('Esperas', () => {
     })
 
 
-    it.only('Click retry', () => {        
+    it('Click retry', () => {        
         cy.get('#buttonCount')
             .click()
             .click()
@@ -101,5 +101,50 @@ describe('Esperas', () => {
     })
 
 
+    it('should vs then V1', () => {
+        cy.get('#buttonListDOM').click()    
+        //cy.get('#buttonListDOM').debug()    
+        /*$el convencao do jquery, nao eh obrigatorio 
+          $el nao eh um elemento do cypress, eh um elemento html capturado, deve ser tratado como jquery
+          should vs then 
+            should faz uma consulta com retries ateh encontrar o objeto buscado
+            then espera o objeto ser encontrado, depois prossegue o fluxo
+          */        
+        })
+
+    /*no should, o cypress retorna o fluxo normal da funcao*/
+    it('should vs then V2', () => {
+        cy.get('#buttonListDOM').should($el => {
+            expect($el).to.have.length(1)
+            return 2
+        }).and('have.id', 'buttonListDOM')
+    })
+
+    /*no then, eh possivel que o usuario escolha um retorno para a funcao manualmente*/
+    it('should vs then V3', () => {
+        cy.get('#buttonListDOM').then($el => {
+            expect($el).to.have.length(1)
+            return 2
+        }).and('eq',2)
+        .and('not.have.id', 'buttonListDOM')
+    })
+
+    /*funciona corretamente*/
+    it('should vs then V4', () => {
+        cy.get('#buttonListDOM').then($el => {
+            expect($el).to.have.length(1)
+            cy.get('#buttonList') 
+        })
+    })
+
+    /*funciona corretamente*/
+    it.only('should vs then V5', () => {
+        cy.get('#buttonListDOM').should($el => {
+            expect($el).to.have.length(1)
+            /*cy.get('#buttonList')  sistema fica em loop infinito, 
+            pois vc usou objetos diferentes dentro do mesmo contexto
+            caso precise fazer novas buscas use o then no lugar should*/
+        })
+    })
 
 })
