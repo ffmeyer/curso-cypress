@@ -76,7 +76,7 @@ describe('Work with basic elements', () => {
     })
 
 
-    it.only('Combo', () => {
+    it('Combo', () => {
 
         cy.get('[data-test=dataEscolaridade]')
             .select('2o grau completo')
@@ -84,18 +84,41 @@ describe('Work with basic elements', () => {
         
         cy.get('[data-test=dataEscolaridade]')
             .select('1graucomp')
-            .should('have.value', '1 graucomp')
+            .should('have.value', '1graucomp')
 
-        //TODO validar as opcoes selecionadas do combo 
+        cy.get('[data-test=dataEscolaridade] option') 
+            .should('have.length', 8)
+
+        /*valida valores da comobobox*/
+        cy.get('[data-test=dataEscolaridade] option').then($arr => {
+            const values = []
+            $arr.each(function (){
+                values.push(this.innerHTML)
+            })
+            expect(values).to.include.members(["Superior","Mestrado"])
+        })
+            
+
     })
-
 
     it.only('Combo mutiplo', () => {
         //o select funciona apenas com values
         cy.get('[data-testid=dataEsportes]')
             .select(['natacao','Corrida', 'nada'])
 
-        //TODO validar as selecionadas opcoes do combo
+        /* nao funciona corretamente.
+        cy.get('[data-testid=dataEsportes]')
+        .select(['natacao','Corrida', 'nada'])
+        .should('have.value', ['natacao','Corrida', 'nada'])*/
+        
+        cy.get('[data-testid=dataEsportes]').then($el => {
+            expect($el.val()).to.be.deep.equal(['natacao','Corrida', 'nada'])
+            expect($el.val()).to.have.length(3)
+        })
+        
+        cy.get('[data-testid=dataEsportes]')
+            .invoke('val')
+            .should('eql', ['natacao','Corrida', 'nada'])
         
     })
 
