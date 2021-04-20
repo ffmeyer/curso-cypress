@@ -22,3 +22,32 @@ describe('Work with popups', () => {
         cy.get('@winOpen')
     })
 })
+
+describe('With links', () => {
+    
+    beforeEach (() => {
+        cy.visit('https://wcaquino.me/cypress/componentes.html')
+    })
+    /*verificou que a url destino eh a correta*/ 
+    it('Check popup URL', () => {
+        cy.contains('Popup2')
+        /*should('have.prop','algo') <-retorna a propriedade buscada, nao sao todos os shoulds que retornam valor.*/
+        .should('have.prop', 'href')
+            .and('equal', 'https://wcaquino.me/cypress/frame.html')
+    })
+    /*verificou o link utilizando o target do link*/ 
+    it('Should access popup dinamically', () => {
+        cy.contains('Popup2').then($a => {
+            const href = $a.prop('href')
+            cy.visit(href)
+            cy.get('#tfield').type('funciona')
+        })           
+    })
+    /*removeu o atributo target, forcando que o popup abra no contexto principal*/ 
+    it('Should force link on same page', () => {
+        cy.contains('Popup2')
+                .invoke('removeAttr','target')
+                .click()      
+        cy.get('#tfield').type('funciona')
+    })           
+})
