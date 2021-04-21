@@ -15,7 +15,7 @@ describe('Fixtures Tests', () => {
             cy.get('#formEsportes').select(this.usuario.esportes)
         })  
         /*devido ao fato que todas as funcoes do it estao usando funcoes do cypress, por isso ele sincroniza 
-        os dados entao tanto faz deixar o submit / validation dentro ou fora IT
+        os dados entao tanto faz deixar o submit / validation dentro ou fora IT 
         */
         cy.get('#formCadastrar').click()
         cy.get('#resultado > :nth-child(1)').should('contain', 'Cadastrado!')
