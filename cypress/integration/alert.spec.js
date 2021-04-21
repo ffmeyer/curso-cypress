@@ -24,6 +24,11 @@ describe('Work with alerts', () => {
 
     })
 
+    it('Alert com comando externo', () => {
+        /** ver commands.js */
+        cy.clickAlert('#alert', 'Alert Simples') 
+    })        
+
     it('Alert com mock e stub', () => {
         //nomeando uma operacao stub
         const stub = cy.stub().as('alerta')
