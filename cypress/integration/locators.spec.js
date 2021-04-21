@@ -26,7 +26,7 @@ describe('Work with basic elements', () => {
         //cy.xpath("//table[@id='tabelaUsuarios']//td[contains(.,'Francisco')]/../input[@type='text']") 
         cy.xpath("//table[@id='tabelaUsuarios']//td[contains(.,'Francisco')]/../td[6]/input[@type='text']")
         //tambem nao funciona
-        cy.xpath("//td[contains(.,Usuario A)]/following-sibling::td[contains(.,'Mestrado')]/..//input[@type='text']").type('funciona')
+        cy.xpath("//td[contains(.,'Usuario A')]/following-sibling::td[contains(.,'Mestrado')]/..//input[@type='text']").type('funciona')
 
     })
 
