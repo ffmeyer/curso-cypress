@@ -17,9 +17,8 @@ describe('Should be tested at funcional level', () => {
     })
 
     it('Should update an account', () => {
-        cy.pause()
         cy.acessarMenuConta()
-        console.log(loc.FN_XP_BTN_ALTERAR)
+        /*console.log(loc.FN_XP_BTN_ALTERAR) */
         cy.xpath(loc.CONTA.FN_XP_BTN_ALTERAR("Conta de Teste")).click()
         cy.get(loc.CONTA.NOME)
             .clear()
@@ -52,10 +51,14 @@ describe('Should be tested at funcional level', () => {
 
     })
 
-    it('Should creatsse a transaction', () => {
+    it('Should get balance', () => {
         cy.get(loc.MENU.HOME).click()        
         cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Conta Alterada')).should('contain', 123.00)
     })
 
+    it('Should remove  transaction', () => {
+        cy.get(loc.MENU.EXTRATO).click()        
+        cy.xpath(loc.EXTRATO.FN_XP_REMOVE_ELEMENTO('Desc')).click()
+    })
 })
 
