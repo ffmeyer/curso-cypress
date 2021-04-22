@@ -1,22 +1,25 @@
 /// <reference types="cypress" />
 
-
-
-
-
-
 describe('Dinamic tests', () => {
-    before(() => {
+    beforeEach(() => {
         cy.visit('https://wcaquino.me/cypress/componentes.html')
-    })    
-    it('Cadastro com comida variada', () => {
+    })  
 
-        cy.get('#formNome').type(this.usuario.nome)
-        cy.get('#formSobrenome').type(this.usuario.sobrenome)        
-        cy.get(`[name=formSexo][value=${this.usuario.sexo}]`).click()
-        cy.get(`[name=formComidaFavorita][value=${this.usuario.comida}`).click()
-        cy.get('#formEscolaridade').select(this.usuario.escolaridade)
-        cy.get('#formEsportes').select(this.usuario.esportes)
-        
+    const foods = ['Carne', 'Frango', 'Pizza', 'Vegetariano']
+
+    foods.forEach(food => {
+
+        it(`'Cadastro com comida ${food}'`, () => {
+            cy.get('#formNome').type('Usuario')
+            cy.get('#formSobrenome').type('Qualqyer')        
+            cy.get(`[name=formSexo][value='F']`).click()
+            cy.xpath(`//label[contains(.,'${food}')]/preceding-sibling::input`).click()
+            cy.get('#formEscolaridade').select('Doutorado')
+            cy.get('#formEsportes').select('Corrida')
+            cy.get('#formCadastrar').click()
+            cy.get('#resultado > :nth-child(1)').should('contain', 'Cadastrado!') 
+        })
     })
+
+
 })
