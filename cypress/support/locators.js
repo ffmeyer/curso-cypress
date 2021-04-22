@@ -6,28 +6,37 @@ const locators = {
     },
 
     MENU:{
+        HOME: '[data-test=menu-home]',
         SETTINGS: '[data-test=menu-settings]',
         CONTAS: "[href='/contas']",
         RESET: "[href='/reset']",
         MOVIMENTACAO: "[data-test=menu-movimentacao]"
     },
 
-    CONTAS:{
+    CONTA:{                
         NOME: '[data-test=nome]',
         BTN_SALVAR: '.btn',
-        XP_BTN_ALTERAR: "//table//td[contains(., 'Conta de Teste')]/..//i[@class='far fa-edit']",
-
+        FN_XP_BTN_ALTERAR: conta => `//table//td[contains(., '${conta}')]/..//i[@class='far fa-edit']`
     },
 
     MOVIMENTACAO:{
         DESCRICAO: '[data-test=descricao]',
         VALOR: '[data-test=valor]',
-        INTERESSADO: '[data-test=envolvido]',
+        STATUS: '[data-test=status]',
+        INTERESSADO: '[data-test=envolvido]', 
+        CONTA: '[data-test=conta]',
         BTN_SALVAR: '.btn-primary'        
     },
 
+    EXTRATO:{
+        LINHAS: '.list-group > li',
+        FN_XP_BUSCA_ELEMENTO: (desc, value) => `//span[contains(., '${desc}')]/following-sibling::small[contains(.,${value})]`
+    },
+    
+    SALDO:{
+        FN_XP_SALDO_CONTA: nome => `//td[contains(., '${nome}')]/../td[2]`
+    },
 
-    MESSAGE: '.toast-message'
-
+    MESSAGE: '.toast-message', 
 }
 export default locators;
