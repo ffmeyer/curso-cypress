@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Should be tested at funcional level', () => {
+describe('Should be tested at API level', () => {
     let token 
 
     before(() => {
@@ -136,6 +136,17 @@ describe('Should be tested at funcional level', () => {
     })
 
     it('Should remove transaction', () => {
+        cy.request({
+            method: 'GET',
+            url: '/transacoes',
+            headers: { Authorization: `JWT ${token}` } ,
+            qs: { descricao: 'Movimentacao para exclusao' }            
+        }).then(res => {
+            cy.request({
+                url: `/transacoes/${res.body[0].id}`,
+                method: 'DELETE',
+                headers: { Authorization: `JWT ${token}` } ,
+            }).its('status').should('be.equal', 204)
+        })
     })
-
 })
