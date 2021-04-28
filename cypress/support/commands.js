@@ -63,8 +63,9 @@ Cypress.Commands.add('getToken', (user, pass) => {
         })
 })
 
-Cypress.Commands.add('resetRest', () => {
-    cy.getToken('ketifo1196@quossum.com', '12345').then( token => {
+Cypress.Commands.add('resetRest', (user, pass) => {
+    //cy.getToken('ketifo1196@quossum.com', '12345').then( token => {
+    cy.getToken(user, pass).then( token => {
         cy.request({
             method: 'GET',
             url: '/reset',
@@ -73,8 +74,8 @@ Cypress.Commands.add('resetRest', () => {
     })
 })
 
-Cypress.Commands.add('getContaByName', name => {
-    cy.getToken('ketifo1196@quossum.com', '12345').then( token => {
+Cypress.Commands.add('getContaByName',  (user, pass, name) => {
+    cy.getToken(user, pass).then( token => {
         cy.request({
             method: 'GET',
             url: '/contas',
