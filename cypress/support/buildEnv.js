@@ -31,8 +31,8 @@ cy.route ({
         method: 'GET', 
         url: '/contas',
         response: [
-            {conta_id: '1', conta: 'Carteira', visivel: true,  usuario_id: 1 }, 
-            {conta_id: '2', conta: 'Banco', visivel: true,  usuario_id: 1 },    
+            {id: '1', nome: 'Carteira', visivel: true,  usuario_id: 1 }, 
+            {id: '2', nome: 'Banco', visivel: true,  usuario_id: 1 },    
         ]
     }).as('contas')
     

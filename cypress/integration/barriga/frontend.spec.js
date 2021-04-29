@@ -29,7 +29,7 @@ describe('Should be tested at funcional level', () => {
             method: 'POST', 
             url: '/contas',
             response: [
-                {conta_id: '3', conta: 'Conta de teste', visivel: true,  usuario_id: 1 }              
+                {id: '3', nome: 'Conta de teste', visivel: true,  usuario_id: 1 }              
             ]
         }).as('saveConta')
 
@@ -49,18 +49,19 @@ describe('Should be tested at funcional level', () => {
         cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso')        
     })
 
-    it.only('Should update an account', () => {
+    it('Should update an account', () => {
         cy.route ({
             method: 'PUT', 
             url: '/contas/**',
             response: [
-                { id: '1', nome: 'Conta alterada', visivel: true,  usuario_id: 1 }              
+                { id: '1', nome: 'Conta Alterada', visivel: true,  usuario_id: 1 }               
             ]
-        }).as('editConta')
+        }).as('contas')
 
         cy.acessarMenuConta()
+        //cy.pause()
         /*console.log(loc.FN_XP_BTN_ALTERAR) */
-        cy.xpath(loc.CONTA.FN_XP_BTN_ALTERAR("Carteira")).click()
+        cy.xpath(loc.CONTA.FN_XP_BTN_ALTERAR('Carteira')).click()
         cy.get(loc.CONTA.NOME)
             .clear()
             .type('Conta Alterada')
