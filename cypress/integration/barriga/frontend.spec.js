@@ -19,6 +19,7 @@ describe('Should be tested at funcional level', () => {
 
     beforeEach(() => {
         buildEnv()
+        Cypress.Cookies.preserveOnce('session_id', 'remember_token')
         cy.login('whatever@quossum.com','senha errada')
         cy.get(loc.MENU.HOME).click()
         //cy.resetApp()  
@@ -58,7 +59,6 @@ describe('Should be tested at funcional level', () => {
         }).as('contas')
 
         cy.acessarMenuConta()
-        //cy.pause()
         /*console.log(loc.FN_XP_BTN_ALTERAR) */
         cy.xpath(loc.CONTA.FN_XP_BTN_ALTERAR('Carteira')).click()
         cy.get(loc.CONTA.NOME)
@@ -110,17 +110,7 @@ describe('Should be tested at funcional level', () => {
         cy.route ({
             method: 'GET', 
             url: '/extrato/**',            
-            response: [
-                
-                {"conta":"Conta para movimentacoes","id":519005,"descricao":"Movimentacao para exclusao","envolvido":"AAA","observacao":null,"tipo":"DESP","data_transacao":"2021-04-29T03:00:00.000Z","data_pagamento":"2021-04-29T03:00:00.000Z","valor":"-1500.00","status":true,"conta_id":561763,"usuario_id":20839,"transferencia_id":null,"parcelamento_id":null},
-                {"conta":"Conta com movimentacao","id":519006,"descricao":"Movimentacao de conta","envolvido":"BBB","observacao":null,"tipo":"DESP","data_transacao":"2021-04-29T03:00:00.000Z","data_pagamento":"2021-04-29T03:00:00.000Z","valor":"-1500.00","status":true,"conta_id":561764,"usuario_id":20839,"transferencia_id":null,"parcelamento_id":null},
-                {"conta":"Conta para saldo","id":519007,"descricao":"Movimentacao 1, calculo saldo","envolvido":"CCC","observacao":null,"tipo":"REC","data_transacao":"2021-04-29T03:00:00.000Z","data_pagamento":"2021-04-29T03:00:00.000Z","valor":"3500.00","status":false,"conta_id":561765,"usuario_id":20839,"transferencia_id":null,"parcelamento_id":null},
-                {"conta":"Conta para saldo","id":519008,"descricao":"Movimentacao 2, calculo saldo","envolvido":"DDD","observacao":null,"tipo":"DESP","data_transacao":"2021-04-29T03:00:00.000Z","data_pagamento":"2021-04-29T03:00:00.000Z","valor":"-1000.00","status":true,"conta_id":561765,"usuario_id":20839,"transferencia_id":null,"parcelamento_id":null},
-                {"conta":"Conta para saldo","id":519009,"descricao":"Movimentacao 3, calculo saldo","envolvido":"EEE","observacao":null,"tipo":"REC","data_transacao":"2021-04-29T03:00:00.000Z","data_pagamento":"2021-04-29T03:00:00.000Z","valor":"1534.00","status":true,"conta_id":561765,"usuario_id":20839,"transferencia_id":null,"parcelamento_id":null},
-                {"conta":"Conta para extrato","id":519010,"descricao":"Movimentacao para extrato","envolvido":"FFF","observacao":null,"tipo":"DESP","data_transacao":"2021-04-29T03:00:00.000Z","data_pagamento":"2021-04-29T03:00:00.000Z","valor":"-220.00","status":true,"conta_id":561766,"usuario_id":20839,"transferencia_id":null,"parcelamento_id":null},
-                {"conta":"Conta para extrato","id":519011,"descricao":"Desc","envolvido":"FFF","observacao":null,"tipo":"DESP","data_transacao":"2021-04-29T03:00:00.000Z","data_pagamento":"2021-04-29T03:00:00.000Z","valor":"123.00","status":true,"conta_id":561766,"usuario_id":20839,"transferencia_id":null,"parcelamento_id":null}
-            ]
-
+            response: 'fixture:movimentacaoSalva'
         })
 
         cy.acessarMenuConta()        
@@ -137,14 +127,58 @@ describe('Should be tested at funcional level', () => {
         cy.get(loc.EXTRATO.LINHAS).should('have.length',7)
         cy.xpath(loc.EXTRATO.FN_XP_BUSCA_ELEMENTO('Desc','123')).should('exist')
 
-    })
+    })  
 
-    it('Should get balance', () => {
-        //cy.pause()
-        cy.get(loc.MENU.HOME).click()        
-        cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Conta para saldo')).should('contain', 534.00)
+    it.only('Should get balance', () => {
+
+        cy.route({
+            method: 'GET',
+            url: '/transacoes/**',
+            response: { 
+                "conta": "Conta para saldo",
+                "id": 519007,
+                "descricao": "Movimentacao 1, calculo saldo",
+                "envolvido": "CCC",
+                "observacao": null,
+                "tipo": "REC",
+                "data_transacao": "2021-04-29T03:00:00.000Z",
+                "data_pagamento": "2021-04-29T03:00:00.000Z",
+                "valor": "3500.00",
+                "status": false,
+                "conta_id": 561765,
+                "usuario_id": 20839,
+                "transferencia_id": null,
+                "parcelamento_id": null
+            }
+        })
+
+        cy.route({
+            method: 'PUT',
+            url: '/transacoes/**',
+            response: {
+                "conta": "Conta para saldo",
+                "id": 519007,
+                "descricao": "Movimentacao 1, calculo saldo",
+                "envolvido": "CCC",
+                "observacao": null,
+                "tipo": "REC",
+                "data_transacao": "2021-04-29T03:00:00.000Z",
+                "data_pagamento": "2021-04-29T03:00:00.000Z",
+                "valor": "3500.00",
+                "status": false,
+                "conta_id": 561765,
+                "usuario_id": 20839,
+                "transferencia_id": null,
+                "parcelamento_id": null
+            }
+        })
+
+
         
-        cy.get(loc.MENU.EXTRATO).click()  
+        cy.get(loc.MENU.HOME).click()        
+        cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Carteira')).should('contain', 100.00)
+        
+        cy.get(loc.MENU.EXTRATO).click()        
         cy.xpath(loc.EXTRATO.FN_XP_ALTERAR_ELEMENTO('Movimentacao 1, calculo saldo')).click()
         /*forçando sincronismo entra tela de movimentacao e tela de descricao da movimentacao*/
         cy.get(loc.MOVIMENTACAO.DESCRICAO).should('have.value', 'Movimentacao 1, calculo saldo')
@@ -154,8 +188,8 @@ describe('Should be tested at funcional level', () => {
         cy.get(loc.MESSAGE).should('contain', 'Movimentação inserida com sucesso')
 
         cy.get(loc.MENU.HOME).click() 
-        console.log(loc.SALDO.FN_XP_SALDO_CONTA('Conta para saldo'))
-        cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Conta para saldo')).should('contain', '4.034,00')
+        console.log(loc.SALDO.FN_XP_SALDO_CONTA('Carteira'))
+        cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Carteira')).should('contain', '4.034,00')
     })
 
     it('Should remove transaction', () => {
